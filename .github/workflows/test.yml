@@ -1,0 +1,16 @@
+name: test
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  runs-on: ubuntu-latest
+  steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+        fetch-depth: 0
+
+    - name: Get merged PR list
+      run: |
+        git log --merges ${{ github.base_ref }}..${{ github.head_ref }}
