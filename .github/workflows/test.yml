@@ -14,4 +14,5 @@ jobs:
 
       - name: Get merged PR list
         run: |
-          git log --merges ${{ github.base_ref }}..${{ github.head_ref }}
+          git branch -a
+          git diff ${{ github.base_ref }}..${{ github.head_ref }}
