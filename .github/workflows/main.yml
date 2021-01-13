@@ -25,10 +25,12 @@ jobs:
           filters: |
             migrations:
               - added|modified: 'lib/tasks/migrate/**.rake'
-      - run: |
+      - id: migrations
+        run: |
           for file in ${{ steps.changes.outputs.migrations_files }}; do
-            echo "- [] ${file}" >> migration_files.txt
+            echo "- [ ] \`${file}\`" >> migration_files.txt
           done
+          echo ::set-output name=files::$(cat migration_files.txt)
       - uses: marocchino/sticky-pull-request-comment@v2
         if: steps.changes.outputs.migrations == 'true'
         with:
@@ -36,4 +38,4 @@ jobs:
           message: |
             @${{ github.event.pull_request.user.login }} Do not forget running the following migrations!
             
-            $(cat migration_files.txt)
+            ${{ steps.migrations.outputs.files }}
