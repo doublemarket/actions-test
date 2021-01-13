@@ -32,4 +32,4 @@ jobs:
           message: |
             @${{ github.event.pull_request.user.login }} Do not forget running the following migrations!
             
-            ${{ steps.changes.outputs.migrations }}
+            ${{ steps.changes.outputs.migrations_files }}
