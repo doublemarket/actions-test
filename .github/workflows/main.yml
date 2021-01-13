@@ -52,4 +52,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           header: recorder
           message: |
-            @${{ github.event.pull_request.user.login }} Do not forget releasing the recorder as this PR contains changes for the recorder.
+            @${{ github.event.pull_request.user.login }} Do not forget releasing the recorder. This PR contains changes for the recorder.
+
+            - [ ] Done!
