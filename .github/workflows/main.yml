@@ -30,7 +30,10 @@ jobs:
           for file in ${{ steps.changes.outputs.migrations_files }}; do
             echo "- [ ] \`${file}\`" >> migration_files.txt
           done
-          echo ::set-output name=files::$(cat migration_files.txt)
+          files=$(cat migration_files.txt)
+          files="${files//$'\n'/\\n}"
+          files="${files//$'\r'/\\r}"
+          echo ::set-output name=files::${files}
       - uses: marocchino/sticky-pull-request-comment@v2
         if: steps.changes.outputs.migrations == 'true'
         with:
