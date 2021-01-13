@@ -25,6 +25,9 @@ jobs:
           filters: |
             migrations:
               - added|modified: 'lib/tasks/migrate/**.rake'
+            recorder:
+              - 'autify-frontend/packages/*-recorder/**'
+              - 'autify-frontend/packages/common/**'
       - id: migrations
         run: |
           for file in ${{ steps.changes.outputs.migrations_files }}; do
@@ -34,8 +37,6 @@ jobs:
           files="${files//$'\n'/'%0A'}"
           files="${files//$'\r'/'%0D'}"
           echo ::set-output name=files::${files}
-#          files="${files//$'\n'/\\n}"
-#          files="${files//$'\r'/\\r}"
       - uses: marocchino/sticky-pull-request-comment@v2
         if: steps.changes.outputs.migrations == 'true'
         with:
