@@ -31,8 +31,10 @@ jobs:
             echo "- [ ] \`${file}\`" >> migration_files.txt
           done
           files=$(cat migration_files.txt)
-          files="${files//$'\n'/\\n}"
-          files="${files//$'\r'/\\r}"
+          files="${files//$'\n'/'%0A'}"
+          files="${files//$'\r'/'%0D'}"
+#          files="${files//$'\n'/\\n}"
+#          files="${files//$'\r'/\\r}"
           echo ::set-output name=files::${files}
       - uses: marocchino/sticky-pull-request-comment@v2
         if: steps.changes.outputs.migrations == 'true'
