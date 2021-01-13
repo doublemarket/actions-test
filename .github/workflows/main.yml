@@ -12,16 +12,24 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  check-separated-deployments:
     runs-on: ubuntu-latest
+#    if: ${{ github.head_ref == 'develop' }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - id: files
-        uses: jitterbit/get-changed-files@v1
-      - run: |
-          for changed_file in ${{ steps.files.outputs.all }}; do
-            echo "Do something with this ${changed_file}."
-          done
+      - uses: actions/checkout@v2
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          list-files: 'shell'
+          filters: |
+            migrations:
+              - 'lib/tasks/migrate/**.rake'
+      - uses: marocchino/sticky-pull-request-comment@v2
+        if: steps.changes.outputs.migrations == 'true'
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          message: |
+            @${{ github.event.pull_request.user.login }} Do not forget running the following migrations!
+            
+            ${{ steps.changes.outputs.migrations }}
